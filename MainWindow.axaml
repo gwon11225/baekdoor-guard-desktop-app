@@ -1,0 +1,151 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:backdoorGuard="clr-namespace:BackdoorGuard"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="BackdoorGuard.MainWindow"
+        Title="Schedule Manager"
+        x:DataType="backdoorGuard:MainWindowViewModel"
+        xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    
+    <!-- 스타일 -->
+    <Window.Styles>
+        <materialIcons:MaterialIconStyles />
+        
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        
+        <Style Selector="DatePicker:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        <Style Selector="DatePicker">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style Selector="DatePicker:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        
+        <Style Selector="TimePicker:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        <Style Selector="TimePicker">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+        <Style Selector="TimePicker:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+        </Style>
+    </Window.Styles>
+
+    
+    <Grid ColumnDefinitions="*, *" Margin="10">
+        <Border 
+            BorderBrush="#E4E4E7" 
+            BorderThickness="1"
+            CornerRadius="4"
+            Padding="40 30"
+            Margin="10 0">
+            <StackPanel Grid.Column="0" Spacing="10">
+                <TextBlock Text="일정 등록" FontWeight="Bold" FontSize="28"/>
+                <Panel>
+                    <TextBlock> 제목 </TextBlock>
+                    <TextBox 
+                        Text="{Binding Title}" 
+                        Watermark="제목을 입력해주세요" 
+                        Height="40" 
+                        VerticalAlignment="Center" 
+                        Margin="0 20"
+                    >
+                    </TextBox>
+                </Panel>
+                <Panel>
+                    <TextBlock> 날짜 </TextBlock>
+                    <DatePicker 
+                        SelectedDate="{Binding SelectedDate}" 
+                        Height="40" 
+                        HorizontalAlignment="Stretch"
+                        Margin="0 20"/>
+                </Panel>
+                <Panel>
+                    <TextBlock> 시작 시간 </TextBlock>
+                    <TimePicker 
+                        SelectedTime="{Binding StartTime}" 
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Margin="0 20"/>
+                </Panel>
+                <Panel>
+                    <TextBlock> 종료 시간 </TextBlock>
+                    <TimePicker 
+                        SelectedTime="{Binding EndTime}" 
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Margin="0 20"
+                        />
+                </Panel>
+                <Button 
+                    Content="생성" 
+                    Click="AddSchedule"
+                    HorizontalAlignment="Stretch"
+                    Height="40"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    FontSize="15"
+                    Background="Black"
+                    Foreground="White"/>
+            </StackPanel>
+        </Border>
+        
+        
+        <Border Grid.Column="1"
+                BorderBrush="#E4E4E7" 
+                BorderThickness="1"
+                CornerRadius="4"
+                Padding="40 30"
+                Margin="10 0">
+            <StackPanel Spacing="10">
+                <Grid ColumnDefinitions="*, Auto">
+                    <TextBlock Text="일정 목록" FontWeight="Bold" FontSize="28"/>
+                    <Button Grid.Column="1" Click="RefreshSchedules" Background="White" BorderBrush="#E4E4E7">
+                        <materialIcons:MaterialIcon Kind="Refresh" 
+                                        Width="24" 
+                                        Height="24"
+                                        Foreground="Black"/>
+                    </Button>
+                </Grid>
+                <ListBox ItemsSource="{Binding OutingSchedules}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title}"  FontWeight="Bold"/>
+                                    <TextBlock>
+                                        <Run Text="{Binding StartTime}"/>
+                                        <Run Text=" - "/>
+                                        <Run Text="{Binding EndTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                <Button 
+                                    Grid.Column="1" 
+                                    Content="삭제" 
+                                    Click="DeleteSchedule" 
+                                    Tag="{Binding ScheduleId}"
+                                    />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
